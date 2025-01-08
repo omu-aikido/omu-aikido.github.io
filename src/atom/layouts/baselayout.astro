@@ -1,7 +1,7 @@
 ---
 import Head from "../components/root/head.astro";
 import Footer from "../components/root/footer.astro";
-import AccountUi from "../components/ui/account-ui.astro";
+import ThemeToggle from "../components/ui/ThemeToggle.astro";
 import Modal from "../components/ui/modal.astro";
 import "../styles/global.css";
 interface Props {
@@ -40,6 +40,12 @@ const { title, pagename, homelink, textLinks } = Astro.props;
                             </a>
                         ))
                     }
+                    <div
+                        style="margin: 1rem 0; display: flex; align-items: center;    justify-content: space-between;"
+                    >
+                        ダークモード
+                        <ThemeToggle />
+                    </div>
                 </Modal>
             </nav>
             <h2>
@@ -65,7 +71,9 @@ const { title, pagename, homelink, textLinks } = Astro.props;
                     ))
                 }
             </nav>
-            <!-- <AccountUi /> -->
+            <div class="themetoggle-desktop">
+                <ThemeToggle />
+            </div>
         </header>
         <div class="container">
             <main>
@@ -198,7 +206,8 @@ const { title, pagename, homelink, textLinks } = Astro.props;
         .mobile-menu {
             display: flex;
         }
-        .links {
+        .links,
+        .themetoggle-desktop {
             display: none;
         }
         header > h2 {
