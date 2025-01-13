@@ -1,0 +1,45 @@
+name: Deploy Astro to GitHub Pages
+
+on:
+  repository_dispatch:
+    types:
+      - pages_update
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          known_hosts: github.com
+
+      - name: Clone private repository
+        run: |
+          git clone git@github.com:omu-aikido/omu-aikido.git private-repo
+
+      - name: Move to project directory
+        run: cd static/page
+
+      - name: Install dependencies and build Astro site
+        run: |
+          npm install
+          npm run build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # GitHub Pagesへのデプロイ
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
